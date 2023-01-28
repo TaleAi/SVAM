@@ -59,7 +59,7 @@ class ContentMaker:
             for id in selected_list:
                 used_uuid += id[:10] + "|"
                 old = self.mysql.get_data_from_mysql('source_info', 'used_time', f"uuid='{id}'")
-                # self.mysql.update_data_into_mysql('source_info', f'used_time={old + 1}', f"uuid='{id}'")
+                self.mysql.update_data_into_mysql('source_info', f'used_time={old + 1}', f"uuid='{id}'")
             self.mysql.insert_data_into_mysql('creation(uuid,path,direction,used_sources)',
                                               f"('{uuid}','{save_path}','小姐姐','{used_uuid}')")
     def add_field_name(self, single_data, param_list):
