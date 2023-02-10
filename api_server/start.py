@@ -14,7 +14,7 @@ from tencentcloud.common.profile.http_profile import HttpProfile
 from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
 from tencentcloud.iai.v20200303 import iai_client, models
 
-rabbit.init_queue(['download','douyin_upload','kuaishou_upload'])
+# rabbit.init_queue(['download','douyin_upload','kuaishou_upload'])
 app = Flask("my-app")
 
 
@@ -158,4 +158,4 @@ def logger():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=21000)
+    app.run(host='0.0.0.0', port=21011)

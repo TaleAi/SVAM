@@ -5,7 +5,7 @@ import time
 import pika
 import configparser
 from loguru import logger as log
-
+from time import sleep
 
 class Mq:
     """
@@ -167,6 +167,8 @@ class Mq:
                                        )
         except Exception as e:
             log.error('insert_message_into_exchange:' + exchange_name + str(e))
+            sleep(1)
+            self.insert_message_into_exchange(exchange_name, data, exchange_type='fanout', routing_key='')
 
     def insert_message_into_queue(self, queue_name, data):
         """
@@ -191,7 +193,8 @@ class Mq:
                                        )
         except Exception as e:
             log.error(f'insert_message_into_queue:{queue_name}{e}')
-            raise e
+            sleep(1)
+            self.insert_message_into_queue(queue_name, data)
 
     def get_message_not_ack(self, queue_name):
         """
@@ -212,11 +215,16 @@ class Mq:
             return data
         except Exception as e:
             log.error('get_message_not_ack:'+queue_name+str(e))
-            raise e
+            sleep(1)
+            self.get_message_not_ack(queue_name)
 
     def ack_this_message(self):
-        self.check_channel()
-        self.channel.basic_ack(self.method_frame.delivery_tag)
+        try:
+            self.check_channel()
+            self.channel.basic_ack(self.method_frame.delivery_tag)
+        except:
+            sleep(1)
+            self.ack_this_message()
 
     def get_message(self, queue_name):
         """
@@ -238,7 +246,8 @@ class Mq:
             return raw
         except Exception as e:
             log.error('get_message:'+queue_name+str(e))
-            raise e
+            sleep(1)
+            self.get_message(queue_name)
 
     def get_message_count(self, queue_name):
         """
